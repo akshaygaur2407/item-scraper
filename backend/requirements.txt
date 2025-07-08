@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+httpx
+openai
+python-dotenv
+pycountry
+google-generativeai
+slowapi
+together
