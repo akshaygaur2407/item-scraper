@@ -22,7 +22,7 @@ It allows users to search for a product, select a country, and view normalized p
 - **Axios** — API requests
 - **Bootstrap** — UI styling
 - **country-list** — Full country dropdown
-- **Deployed to**: [Vercel / Netlify / your choice]
+- **Deployed to**: [Vercel]
 
 ---
 
@@ -41,3 +41,5 @@ Rate Limits
 ```bash
 git clone https://github.com/akshaygaur2407/item-scraper.git
 cd item-scraper/frontend
+npm i
+npm run dev

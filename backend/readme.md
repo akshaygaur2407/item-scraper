@@ -21,6 +21,7 @@ This is the **FastAPI backend** for the Item Scraper project — a tool that fet
 - **Serper.dev** — Google Shopping results
 - **forex-python** — For currency conversion
 - **Pydantic** — Data validation and parsing
+- **Deployed to**: [Render]
 
 ---
 
