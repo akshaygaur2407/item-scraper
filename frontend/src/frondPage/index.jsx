@@ -20,7 +20,7 @@ const MainComponent = () => {
     setResults([]);
   
     try {
-      const { data } = await axios.get("http://localhost:8000/api/search", {
+      const { data } = await axios.get("https://item-scraper-backend.onrender.com/search", {
         params: {
           query,
           country,
