@@ -14,18 +14,19 @@ const MainComponent = () => {
 
   const handleSearch = async () => {
     if (!query.trim()) return;
-  
+
     setLoading(true);
     setError("");
     setResults([]);
-  
+
     try {
-      const { data } = await axios.get("https://item-scraper-backend.onrender.com/search", {
-        params: {
+      const { data } = await axios.post(
+        "https://item-scraper-backend.onrender.com/search",
+        {
           query,
           country,
-        },
-      });
+        }
+      );
       setResults(data);
       setSubmittedQuery(query);
       setSubmittedCountry(country);
@@ -37,7 +38,6 @@ const MainComponent = () => {
       setLoading(false);
     }
   };
-  
 
   return (
     <div
@@ -58,7 +58,7 @@ const MainComponent = () => {
           style={{
             width: "100%",
             maxWidth: "620px",
-            minWidth:"300px",
+            minWidth: "300px",
             minHeight: "450px",
             borderRadius: "16px",
             backgroundColor: "#ffffff",
