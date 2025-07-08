@@ -95,7 +95,9 @@ const ResultCard = ({ query, country, results, onBack, loading }) => {
                         "N/A"
                       )}
                     </td>
-                    <td style={{ wordBreak: "break-word" }}>{item.productName}</td>
+                    <td style={{ wordBreak: "break-word" }}>
+                      {item.productName}
+                    </td>
                     <td>{item.price}</td>
                     <td>{item.currency}</td>
                     <td>{item.seller || "N/A"}</td>
@@ -104,9 +106,9 @@ const ResultCard = ({ query, country, results, onBack, loading }) => {
                         href={item.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ wordBreak: "break-all" }}
+                        style={{ textDecoration: "underline" }}
                       >
-                        {item.link}
+                        LINK
                       </a>
                     </td>
                   </tr>

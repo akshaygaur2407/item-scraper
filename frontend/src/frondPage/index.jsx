@@ -1,6 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
 import ResultCard from "./ResultCard";
+import { getData } from "country-list";
+
+const countries = getData();
 
 const MainComponent = () => {
   const [query, setQuery] = useState("");
@@ -86,11 +89,11 @@ const MainComponent = () => {
               value={country}
               onChange={(e) => setCountry(e.target.value)}
             >
-              <option value="US">United States</option>
-              <option value="IN">India</option>
-              <option value="UK">United Kingdom</option>
-              <option value="CA">Canada</option>
-              <option value="AU">Australia</option>
+              {countries.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {c.name}
+                </option>
+              ))}
             </select>
           </div>
 
