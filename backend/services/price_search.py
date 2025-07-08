@@ -118,7 +118,6 @@ async def convert_currency(entries: list[ProductEntry], target="USD"):
     
 async def search_prices(country: str, query: str) -> List[ProductEntry]:
     raw = await fetch_from_serper(country, query)
-    breakpoint()
     top_10_raw = sorted(raw, key=safe_price)[:8]
     filtered: List[ProductEntry] = []
     for item in top_10_raw:
