@@ -1,4 +1,4 @@
-# 🛍️ Item Scraper Frontend
+# 🛍️ Item Scraper
 
 This is a **Full Stack Project** for the [Item Scraper](https://github.com/akshaygaur2407/item-scraper) project.  
 It allows users to search for a product, select a country, and view normalized product listings with AI-powered match scoring.
