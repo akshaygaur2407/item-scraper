@@ -33,7 +33,6 @@ async def fetch_from_serper(country: str, query: str) -> list[dict]:
         data = response.json()
         items = data.get("shopping", [])
         results = []
-        print(items)
         for item in items:
             results.append({
                 "title": item.get("title"),
@@ -46,7 +45,7 @@ async def fetch_from_serper(country: str, query: str) -> list[dict]:
         return results
 
 
-async def match_and_build(entry: dict, raw_query: str) -> Optional[ProductEntry]:
+def match_and_build(entry: dict, raw_query: str) -> Optional[ProductEntry]:
     title = entry.get("title", "")
     price = extract_price(entry.get("price", "0")) or 0.0
     currency = entry.get("currency", "")
@@ -67,7 +66,7 @@ async def match_and_build(entry: dict, raw_query: str) -> Optional[ProductEntry]
     try:
         response = together.Complete.create(
             prompt=prompt,
-            model="meta-llama/Llama-3.3-70B-Instruct-Turbo-Free",
+            model="lgai/exaone-3-5-32b-instruct",
             max_tokens=10,
             temperature=0.0,
         )
@@ -123,14 +122,16 @@ async def convert_currency(entries: list[ProductEntry], target="USD"):
     
 async def search_prices(country: str, query: str) -> List[ProductEntry]:
     raw = await fetch_from_serper(country, query)
-    top_10_raw = sorted(raw, key=safe_price)[:8]
-    filtered: List[ProductEntry] = []
-    for item in top_10_raw:
-        entry = await match_and_build(item, query)
-        if entry:
-            filtered.append(entry)
+    top_10_raw = sorted(raw, key=safe_price)[:10]
+    print(top_10_raw)
+    matches = await asyncio.gather(
+        *[asyncio.to_thread(match_and_build, item, query) for item in top_10_raw],
+        return_exceptions=True
+    )
+
+    filtered = [m for m in matches if isinstance(m, ProductEntry)]
+
     target_currency = get_currency_from_country(country.upper())
-    print(target_currency)
     normalized = await convert_currency(filtered, target=target_currency)
 
     return sorted(normalized, key=lambda x: x.price)
