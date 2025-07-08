@@ -50,8 +50,8 @@ async def match_and_build(entry: dict, raw_query: str) -> Optional[ProductEntry]
     price = extract_price(entry.get("price", "0")) or 0.0
     currency = entry.get("currency", "")
     link = entry.get("link", "")
-    source= entry.get("source")
-    thumbnail= entry.get("imageUrl")
+    seller= entry.get("seller")
+    thumbnail= entry.get("thumbnail")
 
     prompt = f"""
                 You are an AI tool designed to compare product names and output a similarity score.
@@ -89,7 +89,7 @@ async def match_and_build(entry: dict, raw_query: str) -> Optional[ProductEntry]
             currency=currency,
             productName=title,
             matchScore=score,
-            source= source,
+            seller= seller,
             thumbnail=thumbnail
         )
 
