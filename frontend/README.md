@@ -26,6 +26,15 @@ It allows users to search for a product, select a country, and view normalized p
 
 ---
 
+## Special notes:- 
+Rate Limits
+- This project uses a free LLM model via Together.ai, which currently supports only 60 requests per minute, so effectively u can make 5 req/min.
+
+- Avoid sending frequent or bulk requests in quick succession to prevent throttling or failure.
+
+- I am only processing the cheapest 10 products that the Serper.dev api returns.
+
+
 ## 📦 Installation
 
 ### 1. Clone the repo
