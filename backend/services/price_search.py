@@ -80,7 +80,7 @@ def match_and_build(entry: dict, raw_query: str) -> Optional[ProductEntry]:
             return None
 
         score = float(match.group(1))
-        if score < 0.8:
+        if score < 0.9:
             return None
 
         return ProductEntry(
