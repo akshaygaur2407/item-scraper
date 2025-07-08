@@ -1,7 +1,7 @@
 import re
 from typing import Optional
 import pycountry
-from forex_python.converter import CurrencyCodes
+from forex_python.converter import CurrencyRates, CurrencyCodes
 
 def extract_price(price_str: str) -> Optional[float]:
     """
@@ -33,15 +33,31 @@ def extract_price(price_str: str) -> Optional[float]:
     except ValueError:
         return None
 
+currency_rates = CurrencyRates()
+
 def get_currency_from_country(country_code: str) -> str:
     try:
-        country = pycountry.countries.get(alpha_2=country_code.upper())
+        country_code = country_code.upper()
+        country = pycountry.countries.get(alpha_2=country_code)
         if not country:
             return "USD"
-        currency_code = CurrencyCodes().get_currency_code(country.name)
-        return currency_code or "USD"
-    except Exception:
+
+        currencies = list(pycountry.currencies)
+        for currency in currencies:
+            if hasattr(currency, 'countries') and country.alpha_2 in currency.countries:
+                print(currency.alpha_3)
+                return currency.alpha_3
+
+        fallback = {
+            "US": "USD", "IN": "INR", "BR": "BRL", "GB": "GBP", "CA": "CAD",
+            "AU": "AUD", "DE": "EUR", "FR": "EUR", "JP": "JPY"
+        }
+        return fallback.get(country_code, "USD")
+
+    except Exception as e:
+        print(f"[Currency Fetch Error]: {e}")
         return "USD"
+
     
 def safe_price(entry):
     try:

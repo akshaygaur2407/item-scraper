@@ -6,6 +6,7 @@ from typing import Optional, List
 import together
 import re
 from services.helper import extract_price, get_currency_from_country, safe_price
+from forex_python.converter import CurrencyRates
 
 async def fetch_from_serper(country: str, query: str) -> list[dict]:
     location = get_serpapi_location(country)
@@ -98,23 +99,27 @@ async def match_and_build(entry: dict, raw_query: str) -> Optional[ProductEntry]
         return None
 
 
+currency_rates = CurrencyRates()
+
 async def convert_currency(entries: list[ProductEntry], target="USD"):
-    base_currency = entries[0].currency
-    if base_currency == target:
-        return entries
-    r = await async_client().get(
-        f"{EXCHANGE_API_URL}/latest",
-        params={"base": base_currency}
-    )
-    rates = r.json().get("rates", {})
-    rate = rates.get(target, 1)
+    if not entries:
+        return []
 
     for e in entries:
-        if e.currency != target:
+        try:
+            if not e.currency or e.currency == target:
+                continue
+
+            rate = currency_rates.get_rate(e.currency, target)
             e.price = round(e.price * rate, 2)
             e.currency = target
 
+        except Exception as err:
+            print(f"[Currency Conversion Error]: {e.productName} | {err}")
+
     return entries
+
+
     
 async def search_prices(country: str, query: str) -> List[ProductEntry]:
     raw = await fetch_from_serper(country, query)
@@ -125,6 +130,7 @@ async def search_prices(country: str, query: str) -> List[ProductEntry]:
         if entry:
             filtered.append(entry)
     target_currency = get_currency_from_country(country.upper())
+    print(target_currency)
     normalized = await convert_currency(filtered, target=target_currency)
 
     return sorted(normalized, key=lambda x: x.price)
