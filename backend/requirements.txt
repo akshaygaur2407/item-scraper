@@ -7,3 +7,4 @@ pycountry
 google-generativeai
 slowapi
 together
+forex_python
